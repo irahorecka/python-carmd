@@ -1,5 +1,5 @@
 """
-Unit testing for actransit module in ../actransit
+Unit testing for carmd module in ../carmd
 """
 
 import os
@@ -44,6 +44,12 @@ class TestCarMD(unittest.TestCase):
     def test_maintenance(self):
         result_vin = self.carmd.maintenance.vin(self.vin, self.mileage)
         result_make = self.carmd.maintenance.make(self.year, self.make, self.model, self.mileage)
+        self.assertIsInstance(result_vin, dict)
+        self.assertIsInstance(result_make, dict)
+
+    def test_maintenance_list(self):
+        result_vin = self.carmd.maintenance_list.vin(self.vin)
+        result_make = self.carmd.maintenance_list.make(self.year, self.make, self.model)
         self.assertIsInstance(result_vin, dict)
         self.assertIsInstance(result_make, dict)
 
