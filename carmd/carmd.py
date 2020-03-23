@@ -1,10 +1,11 @@
-import functools
-import requests
 import json
+import requests
 AUTHORIZATION = 'Basic MmE0MzBkZjYtOTIxOS00ODhjLTllMjktNjQ2MDlhMmY1OWZi'
 PARTNER_TOKEN = 'e18dc0f62dfb456398c83b893d3e81e1'
 
+
 class BaseAPI():
+    """Base wraper for individual CarMD requests."""
     base_url = 'http://api.carmd.com/v3.0'
     api_header = {
         "content-type": "application/json",
@@ -20,6 +21,7 @@ class BaseAPI():
         self.api_header["partner-token"] = partner
 
     def get(self, endpoint):
+        """Get request from specified url endpoint."""
         url = f'{self.base_url}/{endpoint}'
         response = requests.get(url, headers=self.api_header)
         if response.status_code != 200:
@@ -30,6 +32,7 @@ class BaseAPI():
 
 
 def api_method(method):
+    """Decorator for using method signatures for generating url endpoint."""
     def wrapper(self, *args, **kwargs):
         method(self, *args, **kwargs)
         api = self.api
@@ -47,8 +50,9 @@ def api_method(method):
 
 
 class Fields(BaseAPI):
+    """API for available fields:
+    http://api.carmd.com/v3.0/fields"""
     api = 'fields'
-
     @api_method
     def vin(self, vin_no, mileage=None, dtc=None):
         self.vehicle = {
@@ -68,8 +72,9 @@ class Fields(BaseAPI):
 
 
 class Decode(BaseAPI):
+    """API for VIN decode:
+    http://api.carmd.com/v3.0/decode"""
     api = 'decode'
-
     @api_method
     def vin(self, vin_no):
         self.vehicle = {
@@ -87,8 +92,9 @@ class DecodeEnhanced(BaseAPI):
 
 
 class OBDPortLocation(BaseAPI):
+    """API for finding OBD2 port location:
+    http://api.carmd.com/v3.0/port"""
     api = 'port'
-
     @api_method
     def vin(self, vin_no):
         self.vehicle = {
@@ -105,8 +111,9 @@ class OBDPortLocation(BaseAPI):
 
 
 class Maintenance(BaseAPI):
+    """API for maintenance:
+    http://api.carmd.com/v3.0/maint"""
     api = 'maint'
-
     @api_method
     def vin(self, vin_no, mileage):
         self.vehicle = {
@@ -124,9 +131,29 @@ class Maintenance(BaseAPI):
         }
 
 
-class Repair(BaseAPI):
-    api = 'repair'
+class MaintenanceList(BaseAPI):
+    """API for full maintenance list:
+    http://api.carmd.com/v3.0/maintlist"""
+    api = 'maintlist'
+    @api_method
+    def vin(self, vin_no):
+        self.vehicle = {
+            'vin': vin_no
+        }
 
+    @api_method
+    def make(self, year, manufacturer, model):
+        self.vehicle = {
+            'year': year,
+            'make': manufacturer.upper(),
+            'model': model.upper()
+        }
+
+
+class Repair(BaseAPI):
+    """API for repair information:
+    http://api.carmd.com/v3.0/repair"""
+    api = 'repair'
     @api_method
     def vin(self, vin_no, mileage, dtc):
         self.vehicle = {
@@ -137,8 +164,9 @@ class Repair(BaseAPI):
 
 
 class Diagnostics(BaseAPI):
+    """API for diagnostic information:
+    http://api.carmd.com/v3.0/diag"""
     api = 'diag'
-
     @api_method
     def vin(self, vin_no, mileage, dtc):
         self.vehicle = {
@@ -149,8 +177,9 @@ class Diagnostics(BaseAPI):
 
 
 class UpcomingRepairs(BaseAPI):
+    """API for upcoming repairs:
+    http://api.carmd.com/v3.0/upcoming"""
     api = 'upcoming'
-
     @api_method
     def vin(self, vin_no, mileage):
         self.vehicle = {
@@ -169,8 +198,9 @@ class UpcomingRepairs(BaseAPI):
 
 
 class TSB(BaseAPI):
+    """API for technical service bulletin:
+    http://api.carmd.com/v3.0/tsb"""
     api = 'tsb'
-
     @api_method
     def vin(self, vin_no):
         self.vehicle = {
@@ -188,8 +218,9 @@ class TSB(BaseAPI):
 
 
 class SafetyRecalls(BaseAPI):
+    """API for safety recalls:
+    http://api.carmd.com/v3.0/recall"""
     api = 'recall'
-
     @api_method
     def vin(self, vin_no):
         self.vehicle = {
@@ -206,8 +237,9 @@ class SafetyRecalls(BaseAPI):
 
 
 class VehicleWarranty(BaseAPI):
+    """API for warranty status:
+    http://api.carmd.com/v3.0/warranty"""
     api = 'warranty'
-
     @api_method
     def vin(self, vin_no):
         self.vehicle = {
@@ -224,8 +256,9 @@ class VehicleWarranty(BaseAPI):
 
 
 class VehicleImage(BaseAPI):
+    """API for getting vehicle image:
+    http://api.carmd.com/v3.0/image"""
     api = 'image'
-
     @api_method
     def vin(self, vin_no):
         self.vehicle = {
@@ -234,6 +267,11 @@ class VehicleImage(BaseAPI):
 
 
 class YMME(BaseAPI):
+    """API for getting year, model, make, and engine:
+    http://api.carmd.com/v3.0/year
+    http://api.carmd.com/v3.0/make
+    http://api.carmd.com/v3.0/model
+    http://api.carmd.com/v3.0/engine"""
     @api_method
     def year(self):
         self.api = 'year'
@@ -265,19 +303,22 @@ class YMME(BaseAPI):
 
 
 class Credits(BaseAPI):
+    """API for account credits:
+    http://api.carmd.com/v3.0/credits"""
     api = 'credits'
-
     @api_method
     def balance(self):
         self.vehicle = {}
 
 
 class CarMD():
+    """General class for the CarMD API"""
     fields = None
     decode = None
     decode_enhanced = None
     obd2 = None
     maintenance = None
+    maintenance_list = None
     repair = None
     diagnostics = None
     future_repairs = None
@@ -294,6 +335,7 @@ class CarMD():
         self.decode_enhanced = DecodeEnhanced()
         self.obd2 = OBDPortLocation()
         self.maintenance = Maintenance()
+        self.maintenance_list = MaintenanceList()
         self.repair = Repair()
         self.diagnostics = Diagnostics()
         self.future_repairs = UpcomingRepairs()
