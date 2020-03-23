@@ -11,7 +11,6 @@ class BaseAPI():
         "authorization": "your_auth_key_here",
         "partner-token": "your_partner_token_here"
     }
-
     def __init__(self, auth=AUTHORIZATION, partner=PARTNER_TOKEN):
         if not auth:
             raise KeyError("Please pass a valid authorization key.")
@@ -22,7 +21,6 @@ class BaseAPI():
 
     def get(self, endpoint):
         url = f'{self.base_url}/{endpoint}'
-        print(url)
         response = requests.get(url, headers=self.api_header)
         if response.status_code != 200:
             raise ConnectionError(f"Bad request: {response.status_code}")
@@ -36,7 +34,6 @@ def api_method(method):
         method(self, *args, **kwargs)
         api = self.api
         vehicle = self.vehicle
-        
         vehicle_id = '&'.join([f'{key}={value}' for key, value in vehicle.items() if value])
         if not vehicle_id:
             endpoint = api
@@ -111,7 +108,7 @@ class Maintenance(BaseAPI):
     api = 'maint'
 
     @api_method
-    def vin(self, vin_no, mileage=None):
+    def vin(self, vin_no, mileage):
         self.vehicle = {
             'vin': vin_no,
             'mileage': mileage
@@ -271,28 +268,39 @@ class Credits(BaseAPI):
     api = 'credits'
 
     @api_method
-    def count(self):
+    def balance(self):
         self.vehicle = {}
 
 
+class CarMD():
+    fields = None
+    decode = None
+    decode_enhanced = None
+    obd2 = None
+    maintenance = None
+    repair = None
+    diagnostics = None
+    future_repairs = None
+    tech_service = None
+    recalls = None
+    warranty = None
+    vehicle_image = None
+    ymme = None
+    acct_credit = None
 
-
-
-if __name__ == '__main__':
-    x = Fields()
-    z = x.vin('1GNALDEK9FZ108495')
-    # y = x.get('fields')
-    from pprint import pprint
-    # pprint(z)
-    zz = x.make(2009, 'Toyota', 'priuS', 50000)
-    # pprint(zz)
-    y = Decode()
-    zzz = y.vin('1GNALDEK9FZ108495')
-    # pprint(zzz)
-    bb = YMME()
-    bb.year()
-    bb.make(2015)
-    bb.model(2015, 'Toyota')
-    bb.engine(2000, 'toyota', 'corolla')
-    credit = Credits()
-    print(credit.count())
+    def __init__(self):
+        self.fields = Fields()
+        self.decode = Decode()
+        self.decode_enhanced = DecodeEnhanced()
+        self.obd2 = OBDPortLocation()
+        self.maintenance = Maintenance()
+        self.repair = Repair()
+        self.diagnostics = Diagnostics()
+        self.future_repairs = UpcomingRepairs()
+        self.tech_service = TSB()
+        self.recalls = SafetyRecalls()
+        self.warranty = VehicleWarranty()
+        self.vehicle_image = VehicleImage()
+        self.ymme = YMME()
+        self.acct_credit = Credits()
+        
