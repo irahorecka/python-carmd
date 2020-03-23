@@ -22,12 +22,13 @@ class BaseAPI():
 
     def get(self, endpoint):
         url = f'{self.base_url}/{endpoint}'
-        item = requests.get(url, headers=self.api_header)
-        if item.status_code != 200:
-            print('bad request')
-        response = json.loads(item.content)
+        print(url)
+        response = requests.get(url, headers=self.api_header)
+        if response.status_code != 200:
+            raise ConnectionError(f"Bad request: {response.status_code}")
+        response_json = json.loads(response.content)
 
-        return response
+        return response_json
 
 
 def api_method(method):
@@ -37,32 +38,13 @@ def api_method(method):
         vehicle = self.vehicle
         
         vehicle_id = '&'.join([f'{key}={value}' for key, value in vehicle.items() if value])
-        print(vehicle_id)
-        endpoint = f"{api}?{vehicle_id}"
+        if not vehicle_id:
+            endpoint = api
+        else:
+            endpoint = f"{api}?{vehicle_id}"
         response = self.get(endpoint)
         
         return response
-
-    return wrapper
-
-
-def endpoint_generator(method):
-    def wrapper(self, *args, **kwargs):
-        method(self, *args, **kwargs)
-        print(kwargs, args)
-        if method.__name__ == 'vin':
-            self.vehicle = {
-                'vin': self.vin_no,
-                'mileage': self.mileage,
-                'dtc': self.dtc
-            }
-        elif method.__name__ == 'make':
-            self.vehicle = {
-                'year': self.year,
-                'make': self.manufacturer.lower(),
-                'model': self.model.lower(),
-                'mileage': self.mileage
-            }
 
     return wrapper
 
@@ -71,28 +53,226 @@ class Fields(BaseAPI):
     api = 'fields'
 
     @api_method
-    @endpoint_generator
     def vin(self, vin_no, mileage=None, dtc=None):
-        self.vin_no = vin_no
-        self.mileage = mileage
-        self.dtc = dtc
+        self.vehicle = {
+            'vin': vin_no,
+            'mileage': mileage,
+            'dtc': dtc
+        }
 
     @api_method
-    @endpoint_generator
     def make(self, year, manufacturer, model, mileage=None):
-        self.year = year
-        self.manufacturer = manufacturer
-        self.model = model
-        self.mileage = mileage
+        self.vehicle = {
+            'year': year,
+            'make': manufacturer.upper(),
+            'model': model.upper(),
+            'mileage': mileage
+        }
 
 
 class Decode(BaseAPI):
     api = 'decode'
 
     @api_method
-    @endpoint_generator
     def vin(self, vin_no):
-        self.vin_no = vin_no
+        self.vehicle = {
+            'vin': vin_no
+        }
+
+
+class DecodeEnhanced(BaseAPI):
+    """
+    Coming soon - to be an enhanced version
+    of VIN decode.
+    """
+    # api = 'decode_enh'
+    pass
+
+
+class OBDPortLocation(BaseAPI):
+    api = 'port'
+
+    @api_method
+    def vin(self, vin_no):
+        self.vehicle = {
+            'vin': vin_no
+        }
+
+    @api_method
+    def make(self, year, manufacturer, model):
+        self.vehicle = {
+            'year': year,
+            'make': manufacturer.upper(),
+            'model': model.upper()
+        }
+
+
+class Maintenance(BaseAPI):
+    api = 'maint'
+
+    @api_method
+    def vin(self, vin_no, mileage=None):
+        self.vehicle = {
+            'vin': vin_no,
+            'mileage': mileage
+        }
+
+    @api_method
+    def make(self, year, manufacturer, model, mileage):
+        self.vehicle = {
+            'year': year,
+            'make': manufacturer.upper(),
+            'model': model.upper(),
+            'mileage': mileage
+        }
+
+
+class Repair(BaseAPI):
+    api = 'repair'
+
+    @api_method
+    def vin(self, vin_no, mileage, dtc):
+        self.vehicle = {
+            'vin': vin_no,
+            'mileage': mileage,
+            'dtc': dtc
+        }
+
+
+class Diagnostics(BaseAPI):
+    api = 'diag'
+
+    @api_method
+    def vin(self, vin_no, mileage, dtc):
+        self.vehicle = {
+            'vin': vin_no,
+            'mileage': mileage,
+            'dtc': dtc
+        }
+
+
+class UpcomingRepairs(BaseAPI):
+    api = 'upcoming'
+
+    @api_method
+    def vin(self, vin_no, mileage):
+        self.vehicle = {
+            'vin': vin_no,
+            'mileage': mileage
+        }
+
+    @api_method
+    def make(self, year, manufacturer, model, mileage):
+        self.vehicle = {
+            'year': year,
+            'make': manufacturer.upper(),
+            'model': model.upper(),
+            'mileage': mileage
+        }
+
+
+class TSB(BaseAPI):
+    api = 'tsb'
+
+    @api_method
+    def vin(self, vin_no):
+        self.vehicle = {
+            'vin': vin_no
+        }
+
+    @api_method
+    def make(self, year, manufacturer, model, engine):
+        self.vehicle = {
+            'year': year,
+            'make': manufacturer.upper(),
+            'model': model.upper(),
+            'engine': engine
+        }
+
+
+class SafetyRecalls(BaseAPI):
+    api = 'recall'
+
+    @api_method
+    def vin(self, vin_no):
+        self.vehicle = {
+            'vin': vin_no
+        }
+
+    @api_method
+    def make(self, year, manufacturer, model):
+        self.vehicle = {
+            'year': year,
+            'make': manufacturer.upper(),
+            'model': model.upper()
+        }
+
+
+class VehicleWarranty(BaseAPI):
+    api = 'warranty'
+
+    @api_method
+    def vin(self, vin_no):
+        self.vehicle = {
+            'vin': vin_no
+        }
+
+    @api_method
+    def make(self, year, manufacturer, model):
+        self.vehicle = {
+            'year': year,
+            'make': manufacturer.upper(),
+            'model': model.upper()
+        }
+
+
+class VehicleImage(BaseAPI):
+    api = 'image'
+
+    @api_method
+    def vin(self, vin_no):
+        self.vehicle = {
+            'vin': vin_no
+        }
+
+
+class YMME(BaseAPI):
+    @api_method
+    def year(self):
+        self.api = 'year'
+        self.vehicle = {}
+
+    @api_method
+    def make(self, year):
+        self.api = 'make'
+        self.vehicle = {
+            'year': year
+        }
+
+    @api_method
+    def model(self, year, make):
+        self.api = 'model'
+        self.vehicle = {
+            'year': year,
+            'make': make.upper()
+        }
+
+    @api_method
+    def engine(self, year, make, model):
+        self.api = 'engine'
+        self.vehicle = {
+            'year': year,
+            'make': make.upper(),
+            'model': model.upper()
+        }
+
+
+class Credits(BaseAPI):
+    api = 'credits'
+
+    @api_method
+    def count(self):
+        self.vehicle = {}
 
 
 
@@ -100,12 +280,19 @@ class Decode(BaseAPI):
 
 if __name__ == '__main__':
     x = Fields()
-    z = x.vin(vin_no='1GNALDEK9FZ108495')
+    z = x.vin('1GNALDEK9FZ108495')
     # y = x.get('fields')
     from pprint import pprint
-    pprint(z)
-    zz = x.make(2009, 'Toyota', 'priuS')
-    pprint(zz)
+    # pprint(z)
+    zz = x.make(2009, 'Toyota', 'priuS', 50000)
+    # pprint(zz)
     y = Decode()
-    zzz = y.vin(vin_no='1GNALDEK9FZ108495')
-    pprint(zzz)
+    zzz = y.vin('1GNALDEK9FZ108495')
+    # pprint(zzz)
+    bb = YMME()
+    bb.year()
+    bb.make(2015)
+    bb.model(2015, 'Toyota')
+    bb.engine(2000, 'toyota', 'corolla')
+    credit = Credits()
+    print(credit.count())
