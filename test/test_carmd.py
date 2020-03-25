@@ -115,6 +115,10 @@ class TestCarMD(unittest.TestCase):
         with self.assertRaises(TypeError):
             CarMD()
 
+    def test_connection_error(self):
+        with self.assertRaises(ConnectionError):
+            self.carmd.ymme.make(self.model)  # accepts self.year
+
 
 if __name__ == '__main__':
     unittest.main()
