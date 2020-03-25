@@ -1,7 +1,5 @@
 import json
 import requests
-AUTHORIZATION = 'Basic MmE0MzBkZjYtOTIxOS00ODhjLTllMjktNjQ2MDlhMmY1OWZi'
-PARTNER_TOKEN = 'e18dc0f62dfb456398c83b893d3e81e1'
 
 
 class BaseAPI():
@@ -13,11 +11,14 @@ class BaseAPI():
         "partner-token": "your_partner_token_here"
     }
 
-    def __init__(self, auth=AUTHORIZATION, partner=PARTNER_TOKEN):
+    def __init__(self, auth, partner):
+        """Initialize with appropriate authorization and partner-token for API header"""
         if not auth:
-            raise KeyError("Please pass a valid authorization key.")
+            raise KeyError("Please pass a valid authorization key:"
+                           "e.g. 'Basic MmE0MzBkZjYtOTIxOS00ODhjLTllMjktNjQ2MDlhMmY1OWZx'")
         if not partner:
-            raise KeyError("Please pass a valid partner-token key")
+            raise KeyError("Please pass a valid partner-token key:"
+                           "e.g. 'e18dc0f62dfb456398c83b893d3e81e2'")
         self.api_header["authorization"] = auth
         self.api_header["partner-token"] = partner
 
@@ -343,20 +344,20 @@ class CarMD():
     ymme = None
     acct_credit = None
 
-    def __init__(self):
-        self.fields = Fields()
-        self.decode = Decode()
-        self.decode_enhanced = DecodeEnhanced()
-        self.obd2 = OBDPortLocation()
-        self.maintenance = Maintenance()
-        self.maintenance_list = MaintenanceList()
-        self.repair = Repair()
-        self.diagnostics = Diagnostics()
-        self.future_repairs = UpcomingRepairs()
-        self.tech_service = TSB()
-        self.recalls = SafetyRecalls()
-        self.warranty = VehicleWarranty()
-        self.vehicle_image = VehicleImage()
-        self.ymme = YMME()
-        self.acct_credit = Credits()
-        
+    def __init__(self, auth_key, partner_key):
+        args = (auth_key, partner_key)
+        self.fields = Fields(*args)
+        self.decode = Decode(*args)
+        self.decode_enhanced = DecodeEnhanced(*args)
+        self.obd2 = OBDPortLocation(*args)
+        self.maintenance = Maintenance(*args)
+        self.maintenance_list = MaintenanceList(*args)
+        self.repair = Repair(*args)
+        self.diagnostics = Diagnostics(*args)
+        self.future_repairs = UpcomingRepairs(*args)
+        self.tech_service = TSB(*args)
+        self.recalls = SafetyRecalls(*args)
+        self.warranty = VehicleWarranty(*args)
+        self.vehicle_image = VehicleImage(*args)
+        self.ymme = YMME(*args)
+        self.acct_credit = Credits(*args)

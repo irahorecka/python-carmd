@@ -13,6 +13,8 @@ from carmd import CarMD
 
 
 class TestCarMD(unittest.TestCase):
+    AUTHORIZATION = 'Basic MmE0MzBkZjYtOTIxOS00ODhjLTllMjktNjQ2MDlhMmY1OWZi'
+    PARTNER_TOKEN = 'e18dc0f62dfb456398c83b893d3e81e1'
     vin = "1GNALDEK9FZ108495"
     year = 2015
     make = "chevrolet"
@@ -23,7 +25,7 @@ class TestCarMD(unittest.TestCase):
 
     def setUp(self):
         # comment out if you want to view instance influence on methods
-        self.carmd = CarMD()
+        self.carmd = CarMD(self.AUTHORIZATION, self.PARTNER_TOKEN)
 
     def test_fields(self):
         result_vin = self.carmd.fields.vin(self.vin)
@@ -108,6 +110,10 @@ class TestCarMD(unittest.TestCase):
     def test_credits(self):
         result = self.carmd.acct_credit.balance()
         self.assertIsInstance(result, dict)
+
+    def test_non_instance(self):
+        with self.assertRaises(TypeError):
+            CarMD()
 
 
 if __name__ == '__main__':
