@@ -12,7 +12,7 @@ setuptools.setup(
     name='python-carmd',
     license="MIT",
     description='A simple CarMD API wrapper',
-    version='v0.1.0',
+    version='v0.1.1',
     long_description=README,
     url='https://github.com/irahorecka/python-carmd',
     packages=['carmd'],
