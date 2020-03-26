@@ -224,6 +224,8 @@ Get your vehicle's diagnostic information from its VIN, mileage, and check engin
 .. code:: python
 
     diagnostics_vin = my_car.diagnostics.vin('1GNALDEK9FZ108495', 125000, 'p0420')
+
+    # Output:
     {
       "message":{...},
       "data":{
@@ -238,7 +240,7 @@ Get your vehicle's diagnostic information from its VIN, mileage, and check engin
     }
 
 
-Get upcoming repairs for your vehicle up to 12 months by including your mileage.
+Get upcoming repairs (up to 12 months ) for your vehicle by including your mileage.
 
 .. code:: python
 
@@ -329,7 +331,7 @@ Get warranty status of your vehicle.
     warranty_vin = my_car.warranty.vin('1GNALDEK9FZ108495')
     warranty_make = my_car.warranty.make(2015, 'Chevrolet', 'Equinox')
 
-    # Output
+    # Output:
     {
       "message":{...},
       "data":[{
@@ -356,7 +358,7 @@ Get an image of your vehicle.
 
     image_vin = my_car.vehicle_image.vin('1GNALDEK9FZ108495')
 
-    # Output
+    # Output:
     {
       "message":{...},
       "data":[{
@@ -371,7 +373,7 @@ Get assistance in identifying your car's year, make, model, and engine without u
 
     vehicle_year = my_car.ymme.year()
 
-    # Output
+    # Output:
     {
       "message":{...},
       "data":[ "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005","2004", "2003", "2002", "2001", "2000", "1999", "1998", "1997", "1996"]
@@ -380,7 +382,7 @@ Get assistance in identifying your car's year, make, model, and engine without u
 
     vehicle_make = my_car.ymme.make(2015)
 
-    # Output
+    # Output:
     {
       "message":{...},
       "data":[ "ACURA", "Alfa Romeo", "Aston Martin", "Bently", "BMW", "Buick", "Cadillac", "Chevrolet", "Chrysler", "Dodge", "Ferrari", "Fiat", "Ford", "GMC","Honda", "Hyundai", "..."]
@@ -389,7 +391,7 @@ Get assistance in identifying your car's year, make, model, and engine without u
 
     vehicle_model = my_car.ymme.model(2015, 'Chevrolet')
 
-    # Output
+    # Output:
     {
       "message":{...},
       "data":[ "ILX", "MDX", "RDX", "RLX", "TLX"]
@@ -398,7 +400,7 @@ Get assistance in identifying your car's year, make, model, and engine without u
 
     vehicle_engine = my_car.ymme.engine(2015, 'Chevrolet', 'Equinox')
 
-    # Output
+    # Output:
     {
       "message":{...},
       "data":["V6, 3.5L; SOHC; 24V; SEFI","V6, 3.5L; SOHC; 24V; SEFI; Hybrid"]
@@ -409,9 +411,9 @@ Get remaining credits on your account
 
 .. code:: python
 
-    credits = my_car.acct_credits.balance()
+    my_credits = my_car.acct_credits.balance()
 
-    # Output
+    # Output:
     {
       "message":{...},
       "data":{
