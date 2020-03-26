@@ -14,10 +14,10 @@ class BaseAPI():
     def __init__(self, auth, partner):
         """Initialize with appropriate authorization and partner-token for API header"""
         if not auth:
-            raise KeyError("Please pass a valid authorization key:"
+            raise KeyError("Please pass a valid authorization key: "
                            "e.g. 'Basic MmE0MzBkZjYtOTIxOS00ODhjLTllMjktNjQ2MDlhMmY1OWZx'")
         if not partner:
-            raise KeyError("Please pass a valid partner-token key:"
+            raise KeyError("Please pass a valid partner-token key: "
                            "e.g. 'e18dc0f62dfb456398c83b893d3e81e2'")
         self.api_header["authorization"] = auth
         self.api_header["partner-token"] = partner
@@ -157,7 +157,7 @@ class MaintenanceList(BaseAPI):
         }
 
 
-class Repair(BaseAPI):
+class Repairs(BaseAPI):
     """API for repair information:
     http://api.carmd.com/v3.0/repair"""
     api = 'repair'
@@ -334,7 +334,7 @@ class CarMD():
     obd2 = None
     maintenance = None
     maintenance_list = None
-    repair = None
+    repairs = None
     diagnostics = None
     future_repairs = None
     tech_service = None
@@ -342,9 +342,9 @@ class CarMD():
     warranty = None
     vehicle_image = None
     ymme = None
-    acct_credit = None
+    acct_credits = None
 
-    def __init__(self, auth_key, partner_key):
+    def __init__(self, auth_key=None, partner_key=None):
         args = (auth_key, partner_key)
         self.fields = Fields(*args)
         self.decode = Decode(*args)
@@ -352,7 +352,7 @@ class CarMD():
         self.obd2 = OBDPortLocation(*args)
         self.maintenance = Maintenance(*args)
         self.maintenance_list = MaintenanceList(*args)
-        self.repair = Repair(*args)
+        self.repairs = Repairs(*args)
         self.diagnostics = Diagnostics(*args)
         self.future_repairs = UpcomingRepairs(*args)
         self.tech_service = TSB(*args)
@@ -360,4 +360,4 @@ class CarMD():
         self.warranty = VehicleWarranty(*args)
         self.vehicle_image = VehicleImage(*args)
         self.ymme = YMME(*args)
-        self.acct_credit = Credits(*args)
+        self.acct_credits = Credits(*args)

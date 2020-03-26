@@ -56,7 +56,7 @@ class TestCarMD(unittest.TestCase):
         self.assertIsInstance(result_make, dict)
 
     def test_repair(self):
-        result_vin = self.carmd.repair.vin(self.vin, self.mileage, self.dtc)
+        result_vin = self.carmd.repairs.vin(self.vin, self.mileage, self.dtc)
         self.assertIsInstance(result_vin, dict)
 
     def test_diagnostics(self):
@@ -108,12 +108,16 @@ class TestCarMD(unittest.TestCase):
         self.assertIsInstance(result, dict)
 
     def test_credits(self):
-        result = self.carmd.acct_credit.balance()
+        result = self.carmd.acct_credits.balance()
         self.assertIsInstance(result, dict)
 
     def test_non_instance(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(KeyError):
             CarMD()
+
+    def test_partial_instance(self):
+        with self.assertRaises(KeyError):
+            CarMD('Basic MmE0MzBkZjYtOTIxOS00ODhjLTllMjktNjQ2MDlhMmY1OWZi')
 
     def test_connection_error(self):
         with self.assertRaises(ConnectionError):
