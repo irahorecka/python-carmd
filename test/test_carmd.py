@@ -28,144 +28,144 @@ class TestCarMD(unittest.TestCase):
         self.carmd = CarMD(self.AUTHORIZATION, self.PARTNER_TOKEN)
 
     def test_fields_vin(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.fields(self.mileage, self.dtc), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.fields(self.mileage, self.dtc), dict)
 
     def test_fields_make(self):
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.fields(), dict)
-        self.assertIsInstance(self.carmd.fields(self.mileage), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.fields(), dict)
+        self.assertIsInstance(vehicle_make.fields(self.mileage), dict)
         with self.assertRaises(TypeError):
-            self.carmd.fields(self.mileage, dtc=self.dtc), dict
+            vehicle_make.fields(self.mileage, dtc=self.dtc), dict
 
     def test_decode(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.decode(), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.decode(), dict)
 
     def test_obd2_vin(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.obd2(), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.obd2(), dict)
 
     def test_obd2_make(self):
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.obd2(), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.obd2(), dict)
 
     def test_maintenance_vin(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.maintenance(self.mileage), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.maintenance(self.mileage), dict)
         with self.assertRaises(TypeError):
-            self.carmd.maintenance()
+            vehicle_vin.maintenance()
 
     def test_maintenance_make(self):
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.maintenance(self.mileage), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.maintenance(self.mileage), dict)
         with self.assertRaises(TypeError):
-            self.carmd.maintenance()
+            vehicle_make.maintenance()
 
     def test_maintenance_list_vin(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.maintenance_list(), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.maintenance_list(), dict)
 
     def test_maintenance_list_make(self):
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.maintenance_list(), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.maintenance_list(), dict)
 
     def test_repair(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.repairs(mileage=self.mileage, dtc=self.dtc), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.repairs(mileage=self.mileage, dtc=self.dtc), dict)
         with self.assertRaises(TypeError):
-            self.carmd.repairs()
+            vehicle_vin.repairs()
         with self.assertRaises(TypeError):
-            self.carmd.repairs(mileage=self.mileage)
+            vehicle_vin.repairs(mileage=self.mileage)
         with self.assertRaises(TypeError):
-            self.carmd.repairs(dtc=self.dtc)
+            vehicle_vin.repairs(dtc=self.dtc)
 
     def test_diagnostics(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.diagnostics(mileage=self.mileage, dtc=self.dtc), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.diagnostics(mileage=self.mileage, dtc=self.dtc), dict)
         with self.assertRaises(TypeError):
-            self.carmd.diagnostics()
+            vehicle_vin.diagnostics()
         with self.assertRaises(TypeError):
-            self.carmd.diagnostics(mileage=self.mileage)
+            vehicle_vin.diagnostics(mileage=self.mileage)
         with self.assertRaises(TypeError):
-            self.carmd.diagnostics(dtc=self.dtc)
+            vehicle_vin.diagnostics(dtc=self.dtc)
 
     def test_future_repairs_vin(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.future_repairs(mileage=self.mileage), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.future_repairs(mileage=self.mileage), dict)
         with self.assertRaises(TypeError):
-            self.carmd.future_repairs()
+            vehicle_vin.future_repairs()
 
     def test_future_repairs_make(self):
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.future_repairs(mileage=self.mileage), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.future_repairs(mileage=self.mileage), dict)
         with self.assertRaises(TypeError):
-            self.carmd.future_repairs()
+            vehicle_make.future_repairs()
 
     def test_tech_service_vin(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.tech_service(), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.tech_service(), dict)
 
     def test_tech_service_make(self):
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.tech_service(engine=self.engine), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.tech_service(engine=self.engine), dict)
         with self.assertRaises(TypeError):
-            self.carmd.tech_service()
+            vehicle_make.tech_service()
 
     def test_recalls_vin(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.recalls(), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.recalls(), dict)
 
     def test_recalls_make(self):
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.recalls(), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.recalls(), dict)
 
     def test_warranty_vin(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.warranty(), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.warranty(), dict)
 
     def test_warranty_make(self):
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.warranty(), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.warranty(), dict)
 
     def test_vehicle_image(self):
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.vehicle_image(), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.vehicle_image(), dict)
 
     def test_year(self):
         self.assertIsInstance(self.carmd.ymme.year(), dict)
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.ymme.year(), dict)
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.ymme.year(), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.ymme.year(), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.ymme.year(), dict)
 
     def test_make(self):
         self.assertIsInstance(self.carmd.ymme.make(self.year), dict)
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.ymme.make(self.year), dict)
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.ymme.make(self.year), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.ymme.make(self.year), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.ymme.make(self.year), dict)
 
     def test_model(self):
         self.assertIsInstance(self.carmd.ymme.model(self.year, self.make), dict)
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.ymme.model(self.year, self.make), dict)
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.ymme.model(self.year, self.make), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.ymme.model(self.year, self.make), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.ymme.model(self.year, self.make), dict)
 
     def test_engine(self):
         self.assertIsInstance(self.carmd.ymme.engine(self.year, self.make, self.model), dict)
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.ymme.engine(self.year, self.make, self.model), dict)
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.ymme.engine(self.year, self.make, self.model), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.ymme.engine(self.year, self.make, self.model), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.ymme.engine(self.year, self.make, self.model), dict)
 
     def test_credits(self):
         self.assertIsInstance(self.carmd.acct_credits(), dict)
-        self.carmd.vin(self.vin)
-        self.assertIsInstance(self.carmd.acct_credits(), dict)
-        self.carmd.make(self.year, self.make, self.model)
-        self.assertIsInstance(self.carmd.acct_credits(), dict)
+        vehicle_vin = self.carmd.vin(self.vin)
+        self.assertIsInstance(vehicle_vin.acct_credits(), dict)
+        vehicle_make = self.carmd.make(self.year, self.make, self.model)
+        self.assertIsInstance(vehicle_make.acct_credits(), dict)
 
     def test_non_instance(self):
         with self.assertRaises(KeyError):
