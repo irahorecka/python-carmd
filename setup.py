@@ -14,6 +14,7 @@ setuptools.setup(
     description='A simple CarMD API wrapper',
     version='v0.2.0',
     long_description=README,
+    long_description_content_type="text/x-rst",
     url='https://github.com/irahorecka/python-carmd',
     packages=['carmd'],
     python_requires=">=3.5",
