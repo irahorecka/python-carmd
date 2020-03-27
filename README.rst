@@ -5,6 +5,11 @@ A simple `CarMD <https://api.carmd.com/member/login>`__ API wrapper.
 
 License: `MIT <https://en.wikipedia.org/wiki/MIT_License>`__.
 
+Disclaimer
+----------
+CarMD is a paid service. A free subscription will allow the user to make 10 requests per day.
+You can purchase API credits via `CarMD <https://api.carmd.com/member/login>`__.
+
 Installation
 ------------
 
@@ -22,20 +27,83 @@ Make an instance of the ``CarMD`` class with your authorization and partner-toke
 | Partner-token | e18dc0f62dfb456398c83b893d3e81e1                       |
 +---------------+--------------------------------------------------------+
 
-
 .. code:: python
 
     from carmd import CarMD
-    my_car = CarMD("Basic MmE0MzBkZjYtOTIxOS00ODhjLTllMjktNjQ2MDlhMmY1OWZi",
-                   "e18dc0f62dfb456398c83b893d3e81e1")
+    car = CarMD("Basic MmE0MzBkZjYtOTIxOS00ODhjLTllMjktNjQ2MDlhMmY1OWZi",
+                "e18dc0f62dfb456398c83b893d3e81e1")
+
+
+You can use either VIN or make to specify your vehicle. Assign to a new object.
+
+.. code:: python
+
+    # Using VIN -- car.vin(vin)
+    my_vehicle = car.vin("1GNALDEK9FZ108495")
+    print(my_vehicle)
+
+    >>> CarMD Object - Vehicle ID: {'vin': '1GNALDEK9FZ108495'}
+
+
+    # Using make -- car.make(year, make, model)
+    my_chevy = car.make(2015, "Chevrolet", "Equinox")
+    print(my_chevy)
+
+    >>> CarMD Object - Vehicle ID: {'year': 2015, 'make': 'CHEVROLET', 'model': 'EQUINOX'}
+
+
+Below are the limitations of each vehicle object (``car``, ``car.make``, ``car.vin``)
+
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ﻿Method               | ``car``                            | ``car.make``                       | ``car.vin``                        |
++======================+====================================+====================================+====================================+
+| ``fields``           | X                                  | ``fields(mileage=None)``           | ``fields(mileage=None, dtc=None)`` |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``decode``           | X                                  | X                                  | ``decode()``                       |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``obd2``             | X                                  | ``obd2()``                         | ``obd2()``                         |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``maintenance``      | X                                  | ``maintenance(mileage)``           | ``maintenance(mileage)``           |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``maintenance_list`` | X                                  | ``maintenance_list()``             | ``maintenance_list()``             |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``repairs``          | X                                  | X                                  | ``repairs(mileage, dtc)``          |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``diagnostics``      | X                                  | X                                  | ``diagnostics(mileage, dtc)``      |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``future_repairs``   | X                                  | ``future_repairs(mileage)``        | ``future_repairs(mileage)``        |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``tech_service``     | X                                  | ``tech_service(engine)``           | ``tech_service()``                 |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``recalls``          | X                                  | ``recalls()``                      | ``recalls()``                      |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``warranty``         | X                                  | ``warranty()``                     | ``warranty()``                     |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``vehicle_image``    | X                                  | X                                  | ``vehicle_image()``                |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``ymme.year``        | ``ymme.year()``                    | ``ymme.year()``                    | ``ymme.year()``                    |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``ymme.make``        | ``ymme.make(year)``                | ``ymme.make(year)``                | ``ymme.make(year)``                |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``ymme.model``       | ``ymme.model(year, make)``         | ``ymme.model(year, make)``         | ``ymme.model(year, make)``         |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``ymme.engine``      | ``ymme.engine(year, make, model)`` | ``ymme.engine(year, make, model)`` | ``ymme.engine(year, make, model)`` |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+| ``acct_credits``     | ``acct_credits()``                 | ``acct_credits()``                 | ``acct_credits()``                 |
++----------------------+------------------------------------+------------------------------------+------------------------------------+
+
+
+We will access these API endpoints following our previous examples of our ``car``, ``car.vin``, and ``car.make`` objects.
 
 
 Get available API fields for vehicle by VIN or make.
 
 .. code:: python
 
-    fields_vin = my_car.fields.vin('1GNALDEK9FZ108495')
-    fields_make = my_car.fields.make(2015, 'Chevrolet', 'Equinox')
+    # By VIN
+    my_vehicle.fields(mileage=None, dtc=None)
+    # By make
+    my_chevy.fields(mileage=None)
 
     # Output:
     {
@@ -59,7 +127,8 @@ Get information about your vehicle through VIN.
 
 .. code:: python
 
-    decode_vin = my_car.decode.vin('1GNALDEK9FZ108495')
+    # By VIN
+    my_vehicle.decode()
 
     # Output:
     {
@@ -80,8 +149,10 @@ Get information about your car's OBD2 port location.
 
 .. code:: python
 
-    obd_loc_vin = my_car.obd2.vin('1GNALDEK9FZ108495')
-    obd_loc_make = my_car.obd2.make(2015, 'Chevrolet', 'Equinox')
+    # By VIN
+    my_vehicle.obd2()
+    # By make
+    my_chevy.obd2()
 
     # Output:
     {
@@ -100,8 +171,10 @@ Get your vehicle's maintenance information within +/- 10,000 miles of the submit
 
 .. code:: python
 
-    maintenance_vin = my_car.maintenance.vin('1GNALDEK9FZ108495', 125000)
-    maintenance_make = my_car.maintenance.make(2015, 'Chevrolet', 'Equinox', 125000)
+    # By VIN
+    my_vehicle.maintenance(50000)
+    # By make
+    my_chevy.maintenance(50000)
 
     # Output:
     {
@@ -134,8 +207,10 @@ Get the entire maintenance schedule of your vehicle.
 
 .. code:: python
 
-    maintenance_list_vin = my_car.maintenance_list.vin('1GNALDEK9FZ108495')
-    maintenance_list_make = my_car.maintenance_list.make(2015, 'Chevrolet', 'Equinox')
+    # By VIN
+    my_vehicle.maintenance_list()
+    # By make
+    my_chevy.maintenance_list()
 
     # Output:
     {
@@ -175,7 +250,8 @@ Get your vehicle's repair information from its VIN, mileage, and check engine li
 
 .. code:: python
 
-    repairs_vin = my_car.repairs.vin('1GNALDEK9FZ108495', 125000, 'p0420')
+    # By VIN
+    my_vehicle.repairs(50000, 'p0420')
 
     # Output:
     {
@@ -223,7 +299,8 @@ Get your vehicle's diagnostic information from its VIN, mileage, and check engin
 
 .. code:: python
 
-    diagnostics_vin = my_car.diagnostics.vin('1GNALDEK9FZ108495', 125000, 'p0420')
+    # By VIN
+    my_vehicle.diagnostics(50000, 'p0420')
 
     # Output:
     {
@@ -244,8 +321,10 @@ Get upcoming repairs (up to 12 months ) for your vehicle by including your milea
 
 .. code:: python
 
-    future_repairs_vin = my_car.future_repairs.vin('1GNALDEK9FZ108495', 125000)
-    future_repairs_make = my_car.future_repairs.make(2015, 'Chevrolet', 'Equinox', 125000)
+    # By VIN
+    my_vehicle.future_repairs(50000)
+    # By make
+    my_chevy.future_repairs(50000)
 
     # Output:
     {
@@ -274,8 +353,10 @@ Get your vehicle's technical service bulletins (include engine if you are using 
 
 .. code:: python
 
-    tsb_vin = my_car.tech_service.vin('1GNALDEK9FZ108495')
-    tsb_make = my_car.tech_service.make(2015, 'Chevrolet', 'Equinox', 'L4,2.4L;DOHC;16V;DI;FFV')
+    # By VIN
+    my_vehicle.tech_service()
+    # By make
+    my_chevy.tech_service('L4,2.4L;DOHC;16V;DI;FFV')
 
     # Output:
     {
@@ -306,8 +387,10 @@ Get safety recalls on your vehicle.
 
 .. code:: python
 
-    recalls_vin = my_car.recalls.vin('1GNALDEK9FZ108495')
-    recalls_make = my_car.recalls.make(2015, 'Chevrolet', 'Equinox')
+    # By VIN
+    my_vehicle.recalls()
+    # By make
+    my_chevy.recalls()
 
     # Output:
     {
@@ -328,8 +411,10 @@ Get warranty status of your vehicle.
 
 .. code:: python
 
-    warranty_vin = my_car.warranty.vin('1GNALDEK9FZ108495')
-    warranty_make = my_car.warranty.make(2015, 'Chevrolet', 'Equinox')
+    # By VIN
+    my_vehicle.warranty()
+    # By make
+    my_chevy.warranty()
 
     # Output:
     {
@@ -356,7 +441,8 @@ Get an image of your vehicle.
 
 .. code:: python
 
-    image_vin = my_car.vehicle_image.vin('1GNALDEK9FZ108495')
+    # By VIN
+    my_vehicle.vehicle_image()
 
     # Output:
     {
@@ -371,7 +457,12 @@ Get assistance in identifying your car's year, make, model, and engine without u
 
 .. code:: python
 
-    vehicle_year = my_car.ymme.year()
+    # No assignment
+    car.ymme.year()
+    # By VIN
+    my_vehicle.ymme.year()
+    # By make
+    my_chevy.ymme.year()
 
     # Output:
     {
@@ -380,7 +471,12 @@ Get assistance in identifying your car's year, make, model, and engine without u
     }
 
 
-    vehicle_make = my_car.ymme.make(2015)
+    # No assignment
+    car.ymme.make(2015)
+    # By VIN
+    my_vehicle.ymme.year(2015)
+    # By make
+    my_chevy.ymme.year(2015)
 
     # Output:
     {
@@ -389,7 +485,12 @@ Get assistance in identifying your car's year, make, model, and engine without u
     }
 
 
-    vehicle_model = my_car.ymme.model(2015, 'Chevrolet')
+    # No assignment
+    car.ymme.model(2015, "Chevrolet")
+    # By VIN
+    my_vehicle.ymme.model(2015, "Chevrolet")
+    # By make
+    my_chevy.ymme.model(2015, "Chevrolet")
 
     # Output:
     {
@@ -398,7 +499,12 @@ Get assistance in identifying your car's year, make, model, and engine without u
     }
 
 
-    vehicle_engine = my_car.ymme.engine(2015, 'Chevrolet', 'Equinox')
+    # No assignment
+    car.ymme.engine(2015, "Chevrolet", "Equinox")
+    # By VIN
+    my_vehicle.ymme.engine(2015, "Chevrolet", "Equinox")
+    # By make
+    my_chevy.ymme.engine(2015, "Chevrolet", "Equinox")
 
     # Output:
     {
@@ -411,7 +517,12 @@ Get remaining credits on your account
 
 .. code:: python
 
-    my_credits = my_car.acct_credits.balance()
+    # No assignment
+    car.acct_credits()
+    # By VIN
+    my_vehicle.acct_credits()
+    # By make
+    my_chevy.acct_credits()
 
     # Output:
     {
