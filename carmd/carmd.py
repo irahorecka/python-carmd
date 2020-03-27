@@ -268,19 +268,19 @@ class CarMD():
     def __str__(self):
         return "CarMD Object - Vehicle ID: {}".format(self.__vehicle)
 
-    def vin(self, vin_no):
+    def vin(self, vin):
         """Assign a VIN to the CarMD() instance"""
         self.my_vehicle = {
-            'vin': vin_no}
+            'vin': vin}
         self.__vehicle = self.my_vehicle
         self.instantiate(vehicle=self.my_vehicle)
         return self
 
-    def make(self, year, manufacturer, model):
+    def make(self, year, make, model):
         """Assign a make to the CarMD() instance"""
         self.my_vehicle = {
             'year': int(year),
-            'make': manufacturer.upper(),
+            'make': make.upper(),
             'model': model.upper()
         }
         self.__vehicle = self.my_vehicle
