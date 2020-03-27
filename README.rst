@@ -55,7 +55,7 @@ You can use either VIN or make to specify your vehicle. Assign to a new object.
 Below are the limitations of each vehicle object (``car``, ``car.make``, ``car.vin``)
 
 +----------------------+------------------------------------+------------------------------------+------------------------------------+
-| ﻿Method               | ``carmd``                          | ``carmd.make``                     | ``carmd.vin``                      |
+| ﻿Method               | ``car``                            | ``car.make``                       | ``car.vin``                        |
 +======================+====================================+====================================+====================================+
 | ``fields``           | X                                  | ``fields(mileage=None)``           | ``fields(mileage=None, dtc=None)`` |
 +----------------------+------------------------------------+------------------------------------+------------------------------------+
@@ -152,7 +152,7 @@ Get information about your car's OBD2 port location.
     # By VIN
     my_vehicle.obd2()
     # By make
-    my_car.obd2()
+    my_chevy.obd2()
 
     # Output:
     {
