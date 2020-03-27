@@ -263,21 +263,29 @@ class CarMD():
         self.args = (auth_key, partner_key)
         self.ymme = YMME(*self.args)
         self.acct_credits = Credits(*self.args)
+        self.__vehicle = {}
+
+    def __str__(self):
+        return "CarMD Object - Vehicle ID: {}".format(self.__vehicle)
 
     def vin(self, vin_no):
         """Assign a VIN to the CarMD() instance"""
-        my_vehicle = {
+        self.my_vehicle = {
             'vin': vin_no}
-        self.instantiate(vehicle=my_vehicle)
+        self.__vehicle = self.my_vehicle
+        self.instantiate(vehicle=self.my_vehicle)
+        return self
 
     def make(self, year, manufacturer, model):
         """Assign a make to the CarMD() instance"""
-        my_vehicle = {
-            'year': year,
+        self.my_vehicle = {
+            'year': int(year),
             'make': manufacturer.upper(),
             'model': model.upper()
         }
-        self.instantiate(vehicle=my_vehicle)
+        self.__vehicle = self.my_vehicle
+        self.instantiate(vehicle=self.my_vehicle)
+        return self
 
     def instantiate(self, **kwargs):
         """Instantiate appropriate classes by VIN or make"""
