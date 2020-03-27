@@ -7,8 +7,8 @@ License: `MIT <https://en.wikipedia.org/wiki/MIT_License>`__.
 
 Disclaimer
 ----------
-CarMD is a paid service. A free subscription will allow the user to make 10 API queries per day.
-You can purchase more API queries via `CarMD <https://api.carmd.com/member/login>`__.
+CarMD is a paid service. A free subscription will allow the user to make 10 requests per day.
+You can purchase API credits via `CarMD <https://api.carmd.com/member/login>`__.
 
 Installation
 ------------
@@ -92,7 +92,8 @@ Below are the limitations of each vehicle object (``car``, ``car.make``, ``car.v
 | ``acct_credits``     | ``acct_credits()``                 | ``acct_credits()``                 | ``acct_credits()``                 |
 +----------------------+------------------------------------+------------------------------------+------------------------------------+
 
-We will access these API endpoints following our previous examples of our car, car.vin, and car.make objects.
+
+We will access these API endpoints following our previous examples of our ``car``, ``car.vin``, and ``car.make`` objects.
 
 
 Get available API fields for vehicle by VIN or make.
@@ -251,6 +252,7 @@ Get your vehicle's repair information from its VIN, mileage, and check engine li
 
     # By VIN
     my_vehicle.repairs(50000, 'p0420')
+
     # Output:
     {
       "message":{...},
