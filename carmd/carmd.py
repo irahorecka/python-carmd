@@ -56,6 +56,7 @@ class FieldsVin(BaseAPI):
     """API for available fields under VIN:
     http://api.carmd.com/v3.0/fields"""
     api = 'fields'
+
     @api_method
     def __call__(self, mileage=None, dtc=None):
         self.vehicle = self.kwargs['vehicle']
@@ -67,6 +68,7 @@ class FieldsMake(BaseAPI):
     """API for available fields under make:
     http://api.carmd.com/v3.0/fields"""
     api = 'fields'
+
     @api_method
     def __call__(self, mileage=None):
         self.vehicle = self.kwargs['vehicle']
@@ -77,6 +79,7 @@ class Decode(BaseAPI):
     """API for VIN decode:
     http://api.carmd.com/v3.0/decode"""
     api = 'decode'
+
     @api_method
     def __call__(self):
         self.vehicle = self.kwargs['vehicle']
@@ -95,6 +98,7 @@ class OBDPortLocation(BaseAPI):
     """API for finding OBD2 port location:
     http://api.carmd.com/v3.0/port"""
     api = 'port'
+
     @api_method
     def __call__(self):
         self.vehicle = self.kwargs['vehicle']
@@ -104,6 +108,7 @@ class Maintenance(BaseAPI):
     """API for maintenance:
     http://api.carmd.com/v3.0/maint"""
     api = 'maint'
+
     @api_method
     def __call__(self, mileage):
         self.vehicle = self.kwargs['vehicle']
@@ -114,6 +119,7 @@ class MaintenanceList(BaseAPI):
     """API for full maintenance list:
     http://api.carmd.com/v3.0/maintlist"""
     api = 'maintlist'
+
     @api_method
     def __call__(self):
         self.vehicle = self.kwargs['vehicle']
@@ -123,6 +129,7 @@ class Repairs(BaseAPI):
     """API for repair information:
     http://api.carmd.com/v3.0/repair"""
     api = 'repair'
+
     @api_method
     def __call__(self, mileage, dtc):
         self.vehicle = self.kwargs['vehicle']
@@ -134,6 +141,7 @@ class Diagnostics(BaseAPI):
     """API for diagnostic information:
     http://api.carmd.com/v3.0/diag"""
     api = 'diag'
+
     @api_method
     def __call__(self, mileage, dtc):
         self.vehicle = self.kwargs['vehicle']
@@ -145,6 +153,7 @@ class UpcomingRepairs(BaseAPI):
     """API for upcoming repairs:
     http://api.carmd.com/v3.0/upcoming"""
     api = 'upcoming'
+
     @api_method
     def __call__(self, mileage):
         self.vehicle = self.kwargs['vehicle']
@@ -155,6 +164,7 @@ class TSBVin(BaseAPI):
     """API for technical service bulletin using VIN:
     http://api.carmd.com/v3.0/tsb"""
     api = 'tsb'
+
     @api_method
     def __call__(self):
         self.vehicle = self.kwargs['vehicle']
@@ -164,6 +174,7 @@ class TSBMake(BaseAPI):
     """API for technical service bulletin using make:
     http://api.carmd.com/v3.0/tsb"""
     api = 'tsb'
+
     @api_method
     def __call__(self, engine):
         self.vehicle = self.kwargs['vehicle']
@@ -174,6 +185,7 @@ class SafetyRecalls(BaseAPI):
     """API for safety recalls:
     http://api.carmd.com/v3.0/recall"""
     api = 'recall'
+
     @api_method
     def __call__(self):
         self.vehicle = self.kwargs['vehicle']
@@ -183,6 +195,7 @@ class VehicleWarranty(BaseAPI):
     """API for warranty status:
     http://api.carmd.com/v3.0/warranty"""
     api = 'warranty'
+
     @api_method
     def __call__(self):
         self.vehicle = self.kwargs['vehicle']
@@ -192,6 +205,7 @@ class VehicleImage(BaseAPI):
     """API for getting vehicle image:
     http://api.carmd.com/v3.0/image"""
     api = 'image'
+
     @api_method
     def __call__(self):
         self.vehicle = self.kwargs['vehicle']
@@ -237,6 +251,7 @@ class Credits(BaseAPI):
     """API for account credits:
     http://api.carmd.com/v3.0/credits"""
     api = 'credits'
+
     @api_method
     def __call__(self):
         self.vehicle = {}
@@ -249,20 +264,23 @@ class CarMD():
         self.ymme = YMME(*self.args)
         self.acct_credits = Credits(*self.args)
 
+    def vin(self, vin_no):
+        """Assign a VIN to the CarMD() instance"""
+        my_vehicle = {
+            'vin': vin_no}
+        self.instantiate(vehicle=my_vehicle)
+
     def make(self, year, manufacturer, model):
+        """Assign a make to the CarMD() instance"""
         my_vehicle = {
             'year': year,
             'make': manufacturer.upper(),
             'model': model.upper()
         }
-        self.instanciate(vehicle=my_vehicle)
+        self.instantiate(vehicle=my_vehicle)
 
-    def vin(self, vin_no):
-        my_vehicle = {
-            'vin': vin_no}
-        self.instanciate(vehicle=my_vehicle)
-
-    def instanciate(self, **kwargs):
+    def instantiate(self, **kwargs):
+        """Instantiate appropriate classes by VIN or make"""
         if 'vin' in kwargs['vehicle']:
             self.fields = FieldsVin(*self.args, **kwargs)
             self.tech_service = TSBVin(*self.args, **kwargs)
@@ -274,7 +292,6 @@ class CarMD():
         else:
             self.fields = FieldsMake(*self.args, **kwargs)
             self.tech_service = TSBMake(*self.args, **kwargs)
-
         self.obd2 = OBDPortLocation(*self.args, **kwargs)
         self.maintenance = Maintenance(*self.args, **kwargs)
         self.maintenance_list = MaintenanceList(*self.args, **kwargs)
