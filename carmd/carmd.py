@@ -1,3 +1,5 @@
+"""A simple CarMD API wrapper."""
+
 import json
 import requests
 
