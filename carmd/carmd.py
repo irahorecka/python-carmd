@@ -46,7 +46,8 @@ class BaseAPI():
         url = '{}/{}'.format(self.base_url, endpoint)
         response = requests.get(url, headers=self.api_header)
         if response.status_code != 200:
-            raise ConnectionError("Bad request: {}".format(response.status_code))
+            raise ConnectionError("Bad request: {}\n"
+                                  "Requested URL: {}".format(response.status_code, url))
         response_json = json.loads(response.content)
 
         return response_json

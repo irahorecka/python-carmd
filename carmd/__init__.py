@@ -1,4 +1,4 @@
-"""python-carmd is a python package for querying API
+"""python-carmd is a python package for querying
 data from CarMD."""
 
 from . import carmd
