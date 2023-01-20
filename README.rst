@@ -7,7 +7,7 @@ License: `MIT <https://en.wikipedia.org/wiki/MIT_License>`__.
 
 Disclaimer
 ----------
-CarMD is a paid service. A free subscription will allow the user to make 10 credits per day. It should be noted that most of the requests cost more than 10 credits, such as the `repairs` request.
+CarMD is a paid service. A free subscription will allow the user to make 10 credits per day. It should be noted that most of the requests cost more than 10 credits, such as the ``repairs`` request.
 You can purchase API credits via `CarMD <https://api.carmd.com/member/login>`__.
 
 Installation
